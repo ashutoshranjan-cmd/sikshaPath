@@ -27,9 +27,9 @@ FROM php:8.2-apache AS phpbase
 RUN apt-get update && apt-get install -y \
     git unzip zip libzip-dev \
     libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
-    libonig-dev \
+    libonig-dev libxml2-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql zip gd mbstring \
+    && docker-php-ext-install pdo pdo_mysql zip gd mbstring xml \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
@@ -50,7 +50,7 @@ COPY app/ ./app/
 # Remove invalid local path repository entry (if present)
 RUN php -r '$f="composer.json"; $j=json_decode(file_get_contents($f), true); if(isset($j["repositories"]) && is_array($j["repositories"])) { $j["repositories"]=array_values(array_filter($j["repositories"], function($r){ return !(isset($r["type"],$r["url"]) && $r["type"]==="path" && $r["url"]==="packages/laravel-wizard-installer"); })); } file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));'
 
-RUN composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
+RUN composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader --no-cache
 
 
 # =========================================================
@@ -67,9 +67,14 @@ COPY --from=frontend /app/public /var/www/html/public
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
  && sed -i 's|/var/www/|/var/www/html/public|g' /etc/apache2/apache2.conf
 
-# Ensure Laravel writable dirs exist (fix sessions/cache errors)
+# Ensure Laravel writable dirs exist and set permissions
 RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
  && chown -R www-data:www-data storage bootstrap/cache \
  && chmod -R 775 storage bootstrap/cache
 
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost/ || exit 1
+
 EXPOSE 80
+CMD ["apache2-foreground"]
