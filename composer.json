@@ -6,12 +6,6 @@
         "framework",
         "laravel"
     ],
-    "repositories": [
-        {
-            "type": "path",
-            "url": "packages/laravel-wizard-installer"
-        }
-    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
@@ -35,7 +29,6 @@
         "opcodesio/log-viewer": "^3.21",
         "psr/simple-cache": "^2.0",
         "razorpay/razorpay": "2.*",
-        "sagar/laravel-wizard-installer": "*",
         "spatie/laravel-permission": "^5.5",
         "stripe/stripe-php": "^10.0"
     },
