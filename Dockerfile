@@ -27,9 +27,9 @@ FROM php:8.2-apache AS phpbase
 RUN apt-get update && apt-get install -y \
     git unzip zip libzip-dev \
     libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
-    libonig-dev libxml2-dev \
+    libonig-dev libxml2-dev libpq-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql zip gd mbstring xml \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip gd mbstring xml \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
@@ -56,7 +56,13 @@ COPY app/ ./app/
 RUN php -r '$f="composer.json"; $j=json_decode(file_get_contents($f), true); if(isset($j["repositories"]) && is_array($j["repositories"])) { $j["repositories"]=array_values(array_filter($j["repositories"], function($r){ return !(isset($r["type"],$r["url"]) && $r["type"]==="path" && $r["url"]==="packages/laravel-wizard-installer"); })); } file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));'
 
 # Create .env file to prevent Laravel errors during package discovery
-RUN echo "APP_KEY=base64:$(openssl rand -base64 32)" > .env
+RUN echo "APP_KEY=base64:$(openssl rand -base64 32)" > .env \
+ && echo "DB_CONNECTION=mysql" >> .env \
+ && echo "DB_HOST=127.0.0.1" >> .env \
+ && echo "DB_PORT=3306" >> .env \
+ && echo "DB_DATABASE=laravel" >> .env \
+ && echo "DB_USERNAME=root" >> .env \
+ && echo "DB_PASSWORD=" >> .env
 
 RUN composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
