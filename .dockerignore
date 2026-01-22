@@ -1,7 +1,33 @@
-/vendor
-/node_modules
-.env
+# VCS / editor / OS
+.git
+.gitignore
+.gitattributes
+.vscode
+.idea
+.DS_Store
+
+# Node / frontend build junk
+node_modules
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+
+# Laravel / PHP junk
+vendor
 storage/logs
 storage/framework/cache
 storage/framework/sessions
 storage/framework/views
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Tests/docs (optional)
+tests
+docs
+*.md
+
+# Docker / CI (optional)
+docker-compose.yml
