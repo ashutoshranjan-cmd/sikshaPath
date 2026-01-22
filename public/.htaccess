@@ -1,0 +1,42 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    <IfModule mod_headers.c>
+        # Allow any origin BUT NOT "*"
+        SetEnvIf Origin "http(s)?://(.*)$" ORIGIN=$0
+
+        Header always set Access-Control-Allow-Origin %{ORIGIN}e env=ORIGIN
+        Header always set Access-Control-Allow-Credentials "true"
+        Header always set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+        Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept, Cache-Control, school-code"
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle school-code header
+    RewriteCond %{HTTP:school-code} ^(.*)
+    RewriteRule .* - [E=HTTP_SCHOOL_CODE:%1]
+
+    # Pass Authorization header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect trailing slash except directories
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Front controller
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# For images allow *
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg)$">
+        Header always set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+</IfModule>

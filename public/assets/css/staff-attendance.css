@@ -1,0 +1,258 @@
+/* ============================================================
+    BUTTON STYLES — THEMED FOR ATTENDANCE PAGE
+    Used for “Daily / Monthly” toggle and success actions
+=========================================================== */
+.btn-outline-successed {
+    color: #3e4b5b;
+    border-color: transparent !important;
+}
+
+.btn-successed {
+    background-color: #37C978;
+    border-color: transparent !important;
+    color: #fff;
+    font-size: 14px;
+}
+
+.btn-outline-successed.active {
+    background-color: #37C978 !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+
+/* ============================================================
+    ACCESSIBILITY UTILITY CLASSES
+    Used for hidden form inputs (like hidden datepicker)
+=========================================================== */
+.datepicker-anchor-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+/* ============================================================
+    DATE DISPLAY STYLES
+    Container that opens the hidden datepicker
+=========================================================== */
+#dateDisplayContainer {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* ============================================================
+    GENERIC UTILITY CLASSES
+    Gap spacing, padding, etc.
+ =========================================================== */
+.gap-3 {
+    gap: 1rem;
+}
+
+.padding-none {
+    padding: 0 !important;
+}
+
+/* ============================================================
+    STATUS BADGES (Present / Absent / Leave / Half Day)
+    Used inside the staff attendance table for quick status view
+=========================================================== */
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 50rem;
+    /* pill shape */
+    text-transform: none;
+}
+
+.status-badge.not-marked {
+    background-color: #f1f3f5;
+    color: #6c757d;
+}
+
+.status-badge.present {
+    background-color: #d1f7d6;
+    color: #198754;
+}
+
+.status-badge.absent {
+    background-color: #fde8e8;
+    color: #dc3545;
+}
+
+.status-badge.leave {
+    background-color: #e6f0ff;
+    color: #0d6efd;
+}
+
+.status-badge.half-present {
+    background-color: #fff3cd;
+    color: #fd7e14;
+}
+
+.status-badge.holiday {
+    background-color: #e2e3e5;
+    color: #6c757d;
+}
+
+/* ============================================================
+    ATTENDANCE MODAL OPTION STYLES
+    Each option (Present / Absent / Half Day) inside modal
+=========================================================== */
+.attendance-option {
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.attendance-option input[type="radio"] {
+    margin-top: 4px;
+    margin-right: 12px;
+    accent-color: #000000ff;
+}
+
+.option-body h6 {
+    font-size: 0.95rem;
+}
+
+.option-body small {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+/* Sub-options (Half Day → First / Second Half) */
+.sub-option {
+    margin-left: 8px;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+}
+
+/* ============================================================
+    MODAL STYLES — ROUNDED CORNERS, TEXTAREA, ETC.
+    Applies to attendance marking modal only
+=========================================================== */
+.modal-content {
+    border-radius: 10px;
+}
+
+textarea#reason {
+    border-radius: 8px;
+    padding: 10px 12px;
+    resize: none;
+}
+
+/* ============================================================
+    FLOATING MULTI-SELECT BAR (Bottom Action Bar)
+    Appears when multiple staff checkboxes are selected
+=========================================================== */
+.multi-select-floating {
+    position: fixed;
+    left: 50%;
+    bottom: 25px;
+    transform: translateX(-50%);
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    width: auto;
+    min-width: 420px;
+    max-width: 600px;
+    z-index: 1080;
+    transition: all 0.25s ease;
+    border: 1px solid #e9ecef;
+}
+
+/* ============================================================
+    AVATAR DISPLAY STYLES
+    Shows staff photos or initials in the multi-select bar
+=========================================================== */
+#selectedStaffAvatars img,
+#selectedStaffAvatars .avatar-initials {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: -10px;
+    border: 2px solid #fff;
+    background-color: #adb5bd;
+    color: #fff;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#selectedStaffAvatars .avatar-initials {
+    font-size: 14px;
+}
+
+#selectedCount {
+    font-size: 15px;
+    color: #333;
+}
+
+/* ============================================================
+    MULTI-SELECT BAR ANIMATIONS
+    Fade / slide effects for show/hide transitions
+=========================================================== */
+#multiSelectBar.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+#multiSelectBar.hide {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+}
+
+/* ============================================================
+    HALF-DAY TEXT COLOR
+    Used in attendance legends
+=========================================================== */
+.text-half-day {
+    color: #1A8AE3;
+}
+
+.text-absent {
+    color: #fa2a3d;
+}
+
+.text-present {
+    color: #06c957;
+}
+
+.text-holiday {
+    color: #d1d5dc;
+}
+
+.text-leave {
+    color: #6c757d;
+}
+
+:dir(rtl) .me-2 {
+    margin-left: .5rem !important;
+}
+
+:dir(rtl) .ms-3 {
+    margin-right: 1rem !important;
+}
+
+:dir(rtl) .attendance-option input[type="radio"] {
+    margin-top: 4px;
+    margin-left: 12px;
+    accent-color: #000000ff;
+}
+
+:dir(rtl) .monthlyAttendanceDateSection {
+    direction: rtl;
+    display: flex;
+    flex-direction: row-reverse;
+}

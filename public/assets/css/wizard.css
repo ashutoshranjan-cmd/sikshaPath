@@ -1,0 +1,100 @@
+/* Wizard Form Layout Styles */
+.wizard-container {
+    display: flex;
+    background: #fff;
+    border-radius: 0.375rem;
+    overflow: hidden;
+    min-height: 600px;
+}
+.wizard-sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: #f8f9fa;
+    padding: 1.5rem 0;
+    border-right: 1px solid #dee2e6;
+}
+.wizard-sidebar .step-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #6c7293;
+}
+.wizard-sidebar .step-item:hover {
+    background-color: #e9ecef;
+    color: #495057;
+}
+.wizard-sidebar .step-item.active {
+    background: var(--theme-color, #7c3aed);
+    color: #fff;
+    border-left-color: var(--theme-color, #7c3aed);
+}
+.wizard-sidebar .step-item .step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-weight: 600;
+    font-size: 13px;
+    background: #e9ecef;
+    color: #6c7293;
+    flex-shrink: 0;
+}
+.wizard-sidebar .step-item.active .step-number {
+    background: rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+.wizard-content {
+    flex: 1;
+    padding: 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.wizard-step {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+}
+.wizard-step.active {
+    display: flex;
+    flex-direction: column;
+}
+.wizard-step-content {
+    flex: 1;
+}
+.wizard-actions {
+    padding: 1.5rem 0;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+@media (max-width: 768px) {
+    .wizard-container {
+        flex-direction: column;
+    }
+    .wizard-sidebar {
+        width: 100%;
+        min-width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+        padding: 1rem 0;
+    }
+    .wizard-sidebar .steps-list {
+        display: flex;
+        overflow-x: auto;
+    }
+    .wizard-sidebar .step-item {
+        min-width: 150px;
+        white-space: nowrap;
+    }
+}
+

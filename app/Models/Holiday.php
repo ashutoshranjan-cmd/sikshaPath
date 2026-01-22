@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\DateFormatTrait;
+use Carbon\Carbon;
+use App\Services\CachingService;
+
+class Holiday extends Model
+{
+    use HasFactory, DateFormatTrait;
+
+    protected $fillable = [
+        'date',
+        'title',
+        'description',
+        'school_id'
+    ];
+
+    protected $appends = ['default_date_format', 'dmyFormat'];
+
+    public function scopeOwner($query)
+    {
+        if (Auth::user()) {
+            if (Auth::user()->school_id) {
+                if (Auth::user()->hasRole('School Admin') || Auth::user()->hasRole('Teacher')) {
+                    return $query->where('school_id', Auth::user()->school_id);
+                }
+
+                if (Auth::user()->hasRole('Student')) {
+                    return $query->where('school_id', Auth::user()->school_id);
+                }
+                return $query->where('school_id', Auth::user()->school_id);
+            }
+
+            if (!Auth::user()->school_id) {
+                if (Auth::user()->hasRole('Super Admin')) {
+                    return $query;
+                }
+                return $query;
+            }
+        }
+
+        return $query;
+    }
+
+    protected function setDateAttribute($value)
+    {
+        $this->attributes['date'] = date('Y-m-d', strtotime($value));
+    }
+
+    public function getDefaultDateFormatAttribute()
+    {
+        return date('d-m-Y', strtotime($this->date));
+    }
+
+    public function getDmyFormatAttribute()
+    {
+        $cache = app(CachingService::class);
+        $schoolSettings = $cache->getSchoolSettings();
+        $systemSettings = $cache->getSystemSettings();
+        $date_format = $schoolSettings['date_format'] ?? $systemSettings['date_format'] ?? 'Y-m-d';
+        return Carbon::createFromFormat($date_format, $this->date)->format('d-m-Y');
+    }
+
+    public function getCreatedAtAttribute()
+    {
+        return $this->formatDateValue($this->getRawOriginal('created_at'));
+    }
+
+    public function getUpdatedAtAttribute()
+    {
+        return $this->formatDateValue($this->getRawOriginal('updated_at'));
+    }
+
+    public function getDateAttribute()
+    {
+        return $this->formatDateOnly($this->getRawOriginal('date'));
+    }
+}
