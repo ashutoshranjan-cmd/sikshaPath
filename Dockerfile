@@ -19,14 +19,17 @@ RUN npm run production
 # =========================================
 FROM php:8.2-apache
 
-# System deps + PHP extensions required by your composer.json
-RUN apt-get update && apt-get install -y \
-    git unzip zip libzip-dev \
+# Enable apache rewrite + install system deps + required libs for PHP extensions
+RUN a2enmod rewrite \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends \
+    git unzip zip \
+    libzip-dev \
     libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql zip gd mbstring \
-    && a2enmod rewrite \
-    && rm -rf /var/lib/apt/lists/*
+    libonig-dev \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install -j"$(nproc)" pdo pdo_mysql zip gd mbstring \
+ && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
 
