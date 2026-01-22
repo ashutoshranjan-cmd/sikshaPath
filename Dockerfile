@@ -43,6 +43,11 @@ FROM phpbase AS vendor
 WORKDIR /var/www/html
 
 COPY composer.json composer.lock* ./
+COPY artisan ./
+COPY bootstrap/ ./bootstrap/
+COPY config/ ./config/
+COPY database/ ./database/
+COPY routes/ ./routes/
 
 # IMPORTANT: copy the autoloaded helper files so composer doesn't crash
 COPY app/ ./app/
@@ -50,7 +55,10 @@ COPY app/ ./app/
 # Remove invalid local path repository entry (if present)
 RUN php -r '$f="composer.json"; $j=json_decode(file_get_contents($f), true); if(isset($j["repositories"]) && is_array($j["repositories"])) { $j["repositories"]=array_values(array_filter($j["repositories"], function($r){ return !(isset($r["type"],$r["url"]) && $r["type"]==="path" && $r["url"]==="packages/laravel-wizard-installer"); })); } file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));'
 
-RUN composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader --no-cache
+# Create .env file to prevent Laravel errors during package discovery
+RUN echo "APP_KEY=base64:$(openssl rand -base64 32)" > .env
+
+RUN composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
 
 # =========================================================
