@@ -1,32 +1,18 @@
-# Node / frontend
 node_modules
-npm-debug.log*
-yarn.lock
-pnpm-lock.yaml
-
-# PHP / Laravel
 vendor
 
-# Env / secrets
 .env
 .env.*
 !.env.example
 
-# Laravel runtime (keep folders in image; ignore runtime contents)
-storage/logs/*
-storage/framework/cache/*
-storage/framework/sessions/*
-storage/framework/views/*
-bootstrap/cache/*
-
-# Git / OS / IDE
 .git
-.gitignore
 .vscode
 .idea
 .DS_Store
 Thumbs.db
 
-# Docker / misc
-docker-compose*.yml
-*.md
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
